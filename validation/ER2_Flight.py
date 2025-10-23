@@ -1,7 +1,7 @@
 import os.path
 import rioxarray
 import matplotlib
-matplotlib.use("TkAgg")  # or "Qt5Agg" if you have PyQt5 installed
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 import pyampr
 import xarray as xr
@@ -49,7 +49,8 @@ class FlightData:
         comp = {var: {"zlib": True, "complevel": 4} for var in dataset.data_vars}
         dataset.to_netcdf(os.path.join(outpath, fname), encoding=comp)
 
-    def long_plot(self,frequency):
+
+    def longitude_plot(self,frequency):
 
         lon = self.to_pandas()["Longitude"]
         freq_vals = self.to_pandas()[f"MPDI {frequency}"]
@@ -63,14 +64,10 @@ class FlightData:
         plt.tight_layout()
         plt.show(block=True)
 
+
 ER2_flight = FlightData(path ="/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/data_from_RichDJ",
                       date = "25_Oct",
                       scan_direction = "26_50",
                       flight_direction = "WE", )
 
-
-
-ER2_flight.long_plot("10.7")
-
-
-
+ER2_flight.longitude_plot("10.7")
