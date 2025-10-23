@@ -5,7 +5,7 @@ from __future__ import absolute_import
 # A package to read, analyze, and display AMPR data
 #
 #
-from .pyampr import AmprTb
+from .pyampr_main import AmprTb
 # from .pyampr import (AmprTb, _get_timestring_and_sod, _get_sod,
 #                      _method_footer_printout, _method_header_printout,
 #                      _print_times_not_valid)
