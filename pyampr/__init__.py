@@ -6,7 +6,7 @@ from __future__ import absolute_import
 #
 #
 from .pyampr_main import AmprTb
-# from .pyampr import (AmprTb, _get_timestring_and_sod, _get_sod,
+# from .pyampr_main import (AmprTb, _get_timestring_and_sod, _get_sod,
 #                      _method_footer_printout, _method_header_printout,
 #                      _print_times_not_valid)
 from .misc_tools import read_aircraft_nav_into_awot
