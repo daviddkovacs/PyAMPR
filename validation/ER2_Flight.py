@@ -3,7 +3,7 @@ import rioxarray
 import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
-import pyampr
+from datetime import datetime
 import xarray as xr
 import pandas as pd
 import os
@@ -19,7 +19,7 @@ class FlightData:
                  **kwargs):
 
         self.path = path
-        self.date = date
+        self.date = datetime.strptime(date, "%Y-%m-%d").strftime("%d_%b")
         self.scan_direction = scan_direction
         self.flight_direction =flight_direction
 
@@ -65,9 +65,9 @@ class FlightData:
         plt.show(block=True)
 
 
-ER2_flight = FlightData(path ="/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/data_from_RichDJ",
+ER2_flight = FlightData(path =r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMPR\data_from_RichDJ",
                       date = "25_Oct",
                       scan_direction = "26_50",
                       flight_direction = "WE", )
 
-ER2_flight.longitude_plot("10.7")
+ER2_flight.to_pandas()
