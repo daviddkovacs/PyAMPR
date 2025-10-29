@@ -63,7 +63,7 @@ if __name__ == "__main__":
     """
     date = "2024-10-25"
     AMPR_f = "10.7"
-    AMSR2_f = "6.9"
+    AMSR2_f = "10.7"
 
     ER2_flight = FlightData(path=r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMPR\data_from_RichDJ",
                             date=date,
@@ -74,7 +74,7 @@ if __name__ == "__main__":
 
     AMSR2_OBS = SatelliteData(path=r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMSR2",
                               date=date,
-                              overpass="day",
+                              overpass="night",
                               frequency= AMSR2_f
                               )
 
@@ -82,4 +82,9 @@ if __name__ == "__main__":
                                         AMSR2_OBS,
                                         )
 
-    longitude_combined_plot(air_mpdi,sat_mpdi,AMPR_f,AMSR2_f)
+    longitude_combined_plot(air_mpdi,
+                            sat_mpdi,
+                            AMPR_f,
+                            AMSR2_f,
+                            date)
+

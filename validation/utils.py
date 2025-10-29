@@ -1,4 +1,6 @@
 import numpy as np
+from scipy.stats import pearsonr
+from sklearn.metrics import root_mean_squared_error
 from sklearn.neighbors import BallTree
 import pandas as pd
 import matplotlib
@@ -101,19 +103,42 @@ def mpdi(v_freq,
     return mpdi
 
 
+def statistics(air_mpdi,
+               sat_mpdi,):
+
+    r = pd.Series(air_mpdi).corr(pd.Series(sat_mpdi))
+    rmse = np.sqrt(np.mean((sat_mpdi-air_mpdi)**2))
+    bias = np.mean(air_mpdi) -np.mean(sat_mpdi)
+    stats_dict = {"r": np.round(r,2),
+                  "rmse": np.round(rmse,3),
+                  "bias": np.round(bias,3),}
+
+    return stats_dict
+
+
 def longitude_combined_plot(air_mpdi,
                             sat_mpdi,
                             air_freq,
                             sat_freq,
+                            date,
                    ):
+
+    air_mpdi_array = air_mpdi[f"MPDI {air_freq}"]
+    sat_mpdi_array = sat_mpdi[f"MPDI {sat_freq}"]
+
+    stats_dict = statistics(air_mpdi_array,sat_mpdi_array)
 
     plt.figure(figsize=(8, 4))
 
-    plt.plot(air_mpdi["lon"], air_mpdi[f"MPDI {air_freq}"], label="AMPR", color="tab:blue")
-    plt.plot(sat_mpdi["lon"], sat_mpdi[f"MPDI {sat_freq}"], label="AMSR2", color="tab:orange")
+    plt.plot(air_mpdi["lon"], air_mpdi_array, label=f"AMPR {air_freq} GHz", color="tab:blue")
+    plt.plot(sat_mpdi["lon"], sat_mpdi_array, label=f"AMSR2 {sat_freq} GHz", color="tab:orange")
 
     plt.xlabel("Longitude")
     plt.ylabel(f"MPDI")
+    plt.title(f"{date}\n"
+              f"R: {stats_dict['r']}\n"
+              f"RMSE: {stats_dict['rmse']}\n"
+              f"Bias: {stats_dict['bias']}\n")
     plt.legend()
     plt.grid(True)
     plt.tight_layout()

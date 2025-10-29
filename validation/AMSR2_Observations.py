@@ -25,7 +25,7 @@ class SatelliteData:
 
         year_month = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m")
         date_fmt = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d")
-        pattern = f"amsr2_l1bt_day_{date_fmt}_10km.nc"
+        pattern = f"amsr2_l1bt_{self.overpass}_{date_fmt}_10km.nc"
         self.bt_file = os.path.join(path,overpass,year_month,pattern)
 
 
