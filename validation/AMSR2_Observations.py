@@ -14,12 +14,14 @@ class SatelliteData:
                  path,
                  date,
                  overpass,
+                 frequency,
                  *args,
                  **kwargs):
 
         self.path = path
         self.date = date
         self.overpass = overpass
+        self.frequency = frequency
 
         year_month = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m")
         date_fmt = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d")
@@ -33,6 +35,7 @@ class SatelliteData:
         dataset = self.to_xarray()
         pandas = dataset.to_dataframe()
         pandas = pandas.dropna(subset=['scantime']).reset_index()
+        pandas = pandas[["lon","lat","scantime", f"bt_{self.frequency}V", f"bt_{self.frequency}H"]]
         return pandas
 
 

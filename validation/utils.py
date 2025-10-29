@@ -1,6 +1,9 @@
 import numpy as np
 from sklearn.neighbors import BallTree
 import pandas as pd
+import matplotlib
+matplotlib.use("TkAgg")
+import matplotlib.pyplot as plt
 pd.options.mode.chained_assignment = None
 
 def to_radians(df,
@@ -96,6 +99,25 @@ def mpdi(v_freq,
     mpdi = (v_freq-h_freq) / (v_freq + h_freq)
 
     return mpdi
+
+
+def longitude_combined_plot(air_mpdi,
+                            sat_mpdi,
+                            air_freq,
+                            sat_freq,
+                   ):
+
+    plt.figure(figsize=(8, 4))
+
+    plt.plot(air_mpdi["lon"], air_mpdi[f"MPDI {air_freq}"], label="AMPR", color="tab:blue")
+    plt.plot(sat_mpdi["lon"], sat_mpdi[f"MPDI {sat_freq}"], label="AMSR2", color="tab:orange")
+
+    plt.xlabel("Longitude")
+    plt.ylabel(f"MPDI")
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
 
 
 
