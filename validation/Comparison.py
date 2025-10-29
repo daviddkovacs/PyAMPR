@@ -50,6 +50,7 @@ class CompareData:
                        savedir = None,
                        flight_direction = None,
                        scan_direction = None,
+                       show_fig = True
                        ):
 
         stats_dict = self.statistics()
@@ -70,13 +71,15 @@ class CompareData:
         plt.tight_layout()
         if savedir:
             plt.savefig(os.path.join(savedir,rf"{self.date}_{flight_direction}_{scan_direction}_{self.air_freq}_long.png"))
-        plt.show()
+        if show_fig:
+            plt.show()
 
 
     def scatter_plot(self,
                      savedir = None,
                      flight_direction = None,
                      scan_direction = None,
+                     show_fig=True
                      ):
 
         stats_dict = self.statistics()
@@ -115,4 +118,5 @@ class CompareData:
         plt.tight_layout()
         if savedir:
             plt.savefig(os.path.join(savedir,rf"{self.date}_{flight_direction}_{scan_direction}_{self.air_freq}_scatter.png"))
-        plt.show()
+        if show_fig:
+            plt.show()

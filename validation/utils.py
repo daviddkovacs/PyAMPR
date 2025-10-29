@@ -79,6 +79,52 @@ def nn_loc_search(df1,
     return df_dist_ids
 
 
+def collocate_mpdi(ref_obj,
+                    test_obj,
+                    ):
+    """
+
+    Parameters
+    ----------
+    ref_obj: Reference AMPR object, constructed with ER2_flight class
+    test_obj: Test Satellite object, constructed with SatelliteData class
+
+    This function collocates ER2 and Satellite observations in space and calculates MPDI for a band
+
+    Returns
+    -------
+    sat_mpdi, air_mpdi
+    """
+
+    air_data = ref_obj.to_pandas()
+    sat_data = test_obj.to_pandas()
+
+    ampr_freq = ref_obj.frequency
+    sat_freq = test_obj.frequency
+
+
+    # Find NN observations to all locs in air_data
+    nearest_locs = nn_loc_search(sat_data, air_data)
+    # Filter NN to a max radius, i.e.: 15km
+    filtered_nearest_locs = filter_distance(nearest_locs)
+
+    # Filter both datasets to NN<15km observations
+    sat_data_nn = sat_data.iloc[filtered_nearest_locs["index_nn"]]
+    air_data_nn = air_data.iloc[filtered_nearest_locs["index_ref"]]
+
+    # calculate MPDI from satellite data
+    sat_data_nn[f"MPDI {sat_freq}"] = mpdi(sat_data_nn[f"bt_{sat_freq}V"],
+                                        sat_data_nn[f"bt_{sat_freq}H"])
+
+    sat_mpdi = sat_data_nn.filter(["lat", "lon", "scantime", f"MPDI {sat_freq}"], axis=1).reset_index(drop=True)
+    air_mpdi = air_data_nn.filter(["lat", "lon", f"MPDI {ampr_freq}"], axis=1).reset_index(drop=True)
+
+    del sat_data_nn
+    del air_data_nn
+
+    return air_mpdi,sat_mpdi
+
+
 def mpdi(v_freq,
          h_freq):
     """
