@@ -61,7 +61,7 @@ class CompareData:
 
         plt.xlabel("Longitude")
         plt.ylabel(f"MPDI")
-        plt.title(f"{self.date}\n"
+        plt.title(f"{self.date} {flight_direction} {scan_direction}\n"
                   f"R: {stats_dict['r']}\n"
                   f"RMSE: {stats_dict['rmse']}\n"
                   f"Bias: {stats_dict['bias']}\n")
@@ -108,7 +108,7 @@ class CompareData:
 
         plt.xlabel(f"AMPR MPDI {self.air_freq} GHz")
         plt.ylabel(f"AMSR2 MPDI {self.sat_freq} GHz")
-        plt.title(f"{self.date}")
+        plt.title(f"{self.date} {flight_direction} {scan_direction}")
         plt.grid(False)
         plt.xlim([min_val, max_val])
         plt.ylim([min_val,max_val])
