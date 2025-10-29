@@ -4,7 +4,6 @@ import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from datetime import datetime
-
 import xarray as xr
 import pandas as pd
 import os
@@ -42,13 +41,3 @@ class SatelliteData:
         dataset = xr.open_dataset(self.bt_file, decode_timedelta=False)
         dataset = dataset.squeeze("time", drop=True)
         return dataset
-
-AMSR2_OBS = SatelliteData(r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMSR2",
-                          "2024-10-25",
-                          "day",
-                          )
-
-dataset  = AMSR2_OBS.to_pandas()
-
-
-dataset["bt_10.7V"]
