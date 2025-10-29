@@ -18,13 +18,34 @@ def to_radians(df,
     -------
     df: pandas dataframe with lat, lon columns as radians
     """
+
     df.loc[:, f"rad_{lat}"] = np.deg2rad(df[lat].values)
     df.loc[:, f"rad_{lon}"] = np.deg2rad(df[lon].values)
 
     return df
 
+
+def filter_distance(distance_df,
+                    radius = 10):
+    """
+
+    Parameters
+    ----------
+    distance_df: pandas dataframe with nearest distances and ids
+    radius: threshold radius for nearest distances. Default is 10
+
+    Returns
+    -------
+    radius_df: pandas dataframe with nearest distances filtered
+    """
+
+    radius_df = distance_df[distance_df["distance"]<radius]
+
+    return radius_df
+
 def nn_loc_search(df1,
-                  df2):
+                  df2,
+                  ):
     """
 
     Parameters
@@ -39,19 +60,42 @@ def nn_loc_search(df1,
 
     Returns
     -------
-    disances, ids: smallest distances between points in df1 and df2 and its index
+    df_dist_ids: df containing nn dist between df1 and df2, the ids where this happens in df1, and df2 original ids
     """
 
     df1 = to_radians(df1)
     df2 = to_radians(df2)
 
-    radius_earth = 6371 # km
     ball = BallTree(df1[["rad_lat", "rad_lon"]].values, metric='haversine')
-    distances, indices = ball.query(df2[["rad_lat", "rad_lon"]].values, k=1)
+    distances, indices_nn = ball.query(df2[["rad_lat", "rad_lon"]].values, k=1)
 
-    distances = distances * radius_earth
+    radius_earth = 6371 # km
+    distances = distances.ravel() * radius_earth
+    indices_nn = indices_nn.ravel()
+    index_ref = df2.index
 
-    return distances, indices
+    df_dist_ids = pd.DataFrame({"distance": distances,"index_nn": indices_nn, "index_ref": index_ref})
+
+    return df_dist_ids
+
+
+def mpdi(v_freq,
+         h_freq):
+    """
+
+    Parameters
+    ----------
+    v_freq: vertical polarized brightness temperature
+    h_freq: horizontal polarized brightness temperature
+
+    Returns
+    -------
+    mpdi: Microwave Polarisation Difference Index
+    """
+
+    mpdi = (v_freq-h_freq) / (v_freq + h_freq)
+
+    return mpdi
 
 
 

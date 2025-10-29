@@ -7,7 +7,6 @@ from datetime import datetime
 import xarray as xr
 import pandas as pd
 import os
-import geopy
 
 class SatelliteData:
 
@@ -27,11 +26,13 @@ class SatelliteData:
         pattern = f"amsr2_l1bt_day_{date_fmt}_10km.nc"
         self.bt_file = os.path.join(path,overpass,year_month,pattern)
 
+
+
     def to_pandas(self):
 
         dataset = self.to_xarray()
-        pandas = dataset.to_dataframe().reset_index()
-        pandas = pandas.dropna(subset=['scantime'])
+        pandas = dataset.to_dataframe()
+        pandas = pandas.dropna(subset=['scantime']).reset_index()
         return pandas
 
 

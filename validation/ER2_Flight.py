@@ -29,7 +29,6 @@ class FlightData:
         file_name = f"{self.date}_{self.scan_direction}_{self.flight_direction}.mat_data.csv"
         pandas_ampr = pd.read_csv(os.path.join(self.path,file_name), index_col=False)
         pandas_ampr = pandas_ampr.rename(columns={"Longitude": "lon", "Latitude": "lat"})
-
         return pandas_ampr
 
 
