@@ -9,7 +9,14 @@ import pandas as pd
 import os
 
 class SatelliteData:
+    """
+    Class to read in Satellite data from (currently from AMSR2)
 
+    path: location of .nc files
+    date: in format YYYY-MM-DD
+    overpass: day, night
+    frequency: 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
+    """
     def __init__(self,
                  path,
                  date,

@@ -9,7 +9,15 @@ import pandas as pd
 import os
 
 class FlightData:
+    """
+    Class to read in AMPR data from ER-2 flights
 
+    path: location of csv files containing MPDI values
+    date: in format YYYY-MM-DD
+    scan_direction: 1_25, 26_50
+    flight_direction: WE, EW
+    frequency: 10.7, 19.35, 37.1
+    """
     def __init__(self,
                  path,
                  date,

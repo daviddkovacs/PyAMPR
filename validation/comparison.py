@@ -28,7 +28,8 @@ class CompareData:
         self.sat_mpdi_array = sat_mpdi[f"MPDI {sat_freq}"]
 
 
-    def statistics(self):
+    def statistics(self,
+                   ):
 
         r = pd.Series(self.air_mpdi_array).corr(pd.Series(self.sat_mpdi_array))
         rmse = np.sqrt(np.mean((self.sat_mpdi_array - self.air_mpdi_array) ** 2))
@@ -46,7 +47,10 @@ class CompareData:
 
 
     def longitude_plot(self,
-                       savedir = None):
+                       savedir = None,
+                       flight_direction = None,
+                       scan_direction = None,
+                       ):
 
         stats_dict = self.statistics()
 
@@ -65,12 +69,15 @@ class CompareData:
         plt.grid(True)
         plt.tight_layout()
         if savedir:
-            plt.savefig(os.path.join(savedir,rf"{self.date}_{self.air_freq}_long.png"))
+            plt.savefig(os.path.join(savedir,rf"{self.date}_{flight_direction}_{scan_direction}_{self.air_freq}_long.png"))
         plt.show()
 
 
     def scatter_plot(self,
-                     savedir = None):
+                     savedir = None,
+                     flight_direction = None,
+                     scan_direction = None,
+                     ):
 
         stats_dict = self.statistics()
         stats_text = (f"R: {stats_dict['r']}\nRMSE: {stats_dict['rmse']}\n"
@@ -107,5 +114,5 @@ class CompareData:
         plt.ylim([min_val,max_val])
         plt.tight_layout()
         if savedir:
-            plt.savefig(os.path.join(savedir,rf"{self.date}_{self.air_freq}_scatter.png"))
+            plt.savefig(os.path.join(savedir,rf"{self.date}_{flight_direction}_{scan_direction}_{self.air_freq}_scatter.png"))
         plt.show()

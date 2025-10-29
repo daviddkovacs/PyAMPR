@@ -58,18 +58,24 @@ def collocate_mpdi(ref_obj,
 
 if __name__ == "__main__":
     """
+    Setup:
     Available frequencies: 
-        AMPR : 10.7, 19.35, 37.1
-        AMSR2 : 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
+        FlightData (AMPR) : 10.7, 19.35, 37.1
+        SatelliteData (AMSR2) : 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
+
+        
     """
+
     date = "2024-10-25"
+    flight_direction = "WE"
+    scan_direction = "1_25"
     AMPR_f = "10.7"
     AMSR2_f = "10.7"
 
     ER2_flight = FlightData(path=r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMPR\data_from_RichDJ",
                             date=date,
-                            scan_direction="26_50",
-                            flight_direction="WE",
+                            scan_direction=scan_direction,
+                            flight_direction=flight_direction,
                             frequency= AMPR_f,
                             )
 
@@ -79,9 +85,7 @@ if __name__ == "__main__":
                               frequency= AMSR2_f,
                               )
 
-    air_mpdi, sat_mpdi = collocate_mpdi(ER2_flight,
-                                        AMSR2_OBS,
-                                        )
+    air_mpdi, sat_mpdi = collocate_mpdi(ER2_flight, AMSR2_OBS,)
 
     Figs = CompareData(air_mpdi,
                 sat_mpdi,
@@ -91,6 +95,12 @@ if __name__ == "__main__":
 
 
     dir = rf"G:\My Drive\Munka\CLIMERS\ER2_validation\figures"
-    Figs.longitude_plot(savedir = dir)
 
+    Figs.longitude_plot(savedir = dir,
+                        flight_direction = flight_direction,
+                        scan_direction = scan_direction )
+
+    Figs.scatter_plot(savedir = dir,
+                        flight_direction = flight_direction,
+                        scan_direction = scan_direction )
 
