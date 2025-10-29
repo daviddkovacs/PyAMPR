@@ -4,7 +4,35 @@ from validation.Comparison import CompareData
 from utils import collocate_mpdi
 
 
-def validation_processor(path_air,
+def validate_all(path_ampr,
+                 path_amsr,
+                 figpath):
+
+    datelist = ["2024-10-22","2024-10-25", "2024-10-31"]
+    flight_direction_list = ["WE","EW"]
+    scan_direction_list = ["1_25","26_50"]
+    AMPR_f_list = ["10.7", "19.35", "37.1"]
+    AMSR2_f_list = ["10.7", "18.7", "36.5"]
+
+    for d in datelist:
+        for f in flight_direction_list:
+            for s in scan_direction_list:
+                for a_f, s_f in zip(AMPR_f_list, AMSR2_f_list):
+                    print(f"{d} {f} {s}")
+                    validate_singular(
+                        path_air=path_ampr,
+                        path_sat=path_amsr,
+                        scan_direction=s,
+                        flight_direction=f,
+                        air_f=a_f,
+                        sat_f=s_f,
+                        date=d,
+                        fig_path=figpath,
+                        show_fig = False
+                    )
+
+
+def validate_singular(path_air,
                          path_sat,
                          scan_direction,
                          flight_direction,
@@ -48,8 +76,8 @@ def validation_processor(path_air,
 
     Figs = CompareData(air_mpdi,
                 sat_mpdi,
-                AMPR_f,
-                AMSR2_f,
+                air_f,
+                sat_f,
                 date)
 
     Figs.longitude_plot(savedir = fig_path,
@@ -62,29 +90,31 @@ def validation_processor(path_air,
                         scan_direction = scan_direction,
                       show_fig=show_fig)
 
+if __name__ == "__main__":
+    """
+    Setup:
+    Available frequencies:
+        FlightData (AMPR) : 10.7, 19.35, 37.1
+        SatelliteData (AMSR2) : 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
+    """
+    path_ampr = r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMPR\data_from_RichDJ"
+    path_amsr = r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMSR2"
+    date = "2024-10-31"
+    flight_direction = "EW"
+    scan_direction = "1_25"
+    AMPR_f = "37.1"
+    AMSR2_f = "36.5"
+    figpath = rf"G:\My Drive\Munka\CLIMERS\ER2_validation\figures"
 
-"""
-Setup:
-Available frequencies: 
-    FlightData (AMPR) : 10.7, 19.35, 37.1
-    SatelliteData (AMSR2) : 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
-"""
-path_ampr = r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMPR\data_from_RichDJ"
-path_amsr = r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMSR2"
-date = "2024-10-31"
-flight_direction = "EW"
-scan_direction = "1_25"
-AMPR_f = "37.1"
-AMSR2_f = "36.5"
-figpath = rf"G:\My Drive\Munka\CLIMERS\ER2_validation\figures"
+    # validate_singular(
+    #     path_air = path_ampr,
+    #     path_sat=path_amsr,
+    #     scan_direction=scan_direction,
+    #     flight_direction=flight_direction,
+    #     air_f =AMPR_f,
+    #     sat_f=AMSR2_f,
+    #     date=date,
+    #     fig_path=figpath,
+    # )
 
-validation_processor(
-    path_air = path_ampr,
-    path_sat=path_amsr,
-    scan_direction=scan_direction,
-    flight_direction=flight_direction,
-    air_f =AMPR_f,
-    sat_f=AMSR2_f,
-    date=date,
-    fig_path=figpath,
-)
+    validate_all(path_ampr, path_amsr, figpath)
