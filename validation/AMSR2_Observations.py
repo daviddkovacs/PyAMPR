@@ -31,7 +31,7 @@ class SatelliteData:
 
         dataset = self.to_xarray()
         pandas = dataset.to_dataframe().reset_index()
-
+        pandas = pandas.dropna(subset=['scantime'])
         return pandas
 
 
