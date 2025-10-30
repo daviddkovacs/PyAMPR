@@ -115,8 +115,12 @@ def collocate_mpdi(ref_obj,
     # calculate MPDI from satellite data
     sat_data_nn[f"MPDI {sat_freq}"] = mpdi(sat_data_nn[f"bt_{sat_freq}V"],
                                         sat_data_nn[f"bt_{sat_freq}H"])
+    sat_data[f"MPDI {sat_freq}"] = mpdi(sat_data[f"bt_{sat_freq}V"],
+                                        sat_data[f"bt_{sat_freq}H"])
 
-    sat_mpdi = sat_data_nn.filter(["lat", "lon", "scantime", f"MPDI {sat_freq}"], axis=1).reset_index(drop=True)
+    sat_mpdi = { }
+    sat_mpdi["filtered"] = sat_data_nn.filter(["lat", "lon", "scantime", f"MPDI {sat_freq}"], axis=1).reset_index(drop=True)
+    sat_mpdi["original"] = sat_data.filter(["lat", "lon", "scantime", f"MPDI {sat_freq}"], axis=1).reset_index(drop=True)
 
     air_mpdi = { }
     air_mpdi["filtered"] = air_data_nn.filter(["lat", "lon", f"MPDI {ampr_freq}"], axis=1).reset_index(drop=True)
