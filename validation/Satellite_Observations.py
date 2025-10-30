@@ -44,6 +44,7 @@ class SatelliteData:
         pandas = dataset.to_dataframe()
         pandas = pandas.dropna(subset=['scantime']).reset_index()
         pandas = pandas[["lon","lat","scantime", f"bt_{self.frequency}V", f"bt_{self.frequency}H"]]
+
         return pandas
 
 
@@ -52,4 +53,5 @@ class SatelliteData:
 
         dataset = xr.open_dataset(self.bt_file, decode_timedelta=False)
         dataset = dataset.squeeze("time", drop=True)
+
         return dataset

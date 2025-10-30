@@ -33,14 +33,14 @@ def validate_all(path_ampr,
 
 
 def validate_singular(path_air,
-                         path_sat,
-                         scan_direction,
-                         flight_direction,
-                         air_f,
-                         sat_f,
-                         date,
-                         fig_path = None,
-                         show_fig = True):
+                        path_sat,
+                        scan_direction,
+                        flight_direction,
+                        air_f,
+                        sat_f,
+                        date,
+                        fig_path = None,
+                        show_fig = True):
     """
     Runs validation routine. Collocates Satellite observations to AMPR data, and calculates MPDI for radiometers.
 
@@ -99,14 +99,14 @@ if __name__ == "__main__":
         FlightData (AMPR) : 10.7, 19.35, 37.1
         SatelliteData (AMSR2) : 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
     """
-    path_ampr = r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMPR\data_from_RichDJ"
-    path_amsr = r"G:\My Drive\Munka\CLIMERS\ER2_validation\AMSR2"
+    path_ampr = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/data_from_RichDJ"
+    path_amsr = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/LPRM/passive_input/medium_resolution/AMSR2"
     date = "2024-10-31"
     flight_direction = "EW"
     scan_direction = "1_25"
     AMPR_f = "37.1"
     AMSR2_f = "36.5"
-    figpath = rf"G:\My Drive\Munka\CLIMERS\ER2_validation\figures"
+    figpath = rf"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/figures"
 
     # validate_singular(
     #     path_air = path_ampr,
