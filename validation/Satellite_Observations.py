@@ -25,11 +25,11 @@ class SatelliteData:
                  date,
                  overpass,
                  target_res,
-                 frequency,
+                 sat_freq,
                  *args,
                  **kwargs):
 
-        self.frequency = frequency
+        self.sat_freq = sat_freq
 
         year_month = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m")
         date_fmt = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d")
@@ -43,7 +43,7 @@ class SatelliteData:
         dataset = self.to_xarray()
         pandas = dataset.to_dataframe()
         pandas = pandas.dropna(subset=['scantime']).reset_index()
-        pandas = pandas[["lon","lat","scantime", f"bt_{self.frequency}V", f"bt_{self.frequency}H"]]
+        pandas = pandas[["lon","lat","scantime", f"bt_{self.sat_freq}V", f"bt_{self.sat_freq}H"]]
 
         return pandas
 

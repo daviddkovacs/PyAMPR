@@ -1,4 +1,4 @@
-from validation.ER2_Flight import FlightData
+from validation.ER2_Flight import AirborneData
 from validation.Satellite_Observations import SatelliteData
 from validation.Comparison import CompareData
 from utils import collocate_mpdi
@@ -24,8 +24,8 @@ def validate_all(path_ampr,
                         path_sat=path_amsr,
                         scan_direction=s,
                         flight_direction=f,
-                        air_f=a_f,
-                        sat_f=s_f,
+                        air_freq=a_f,
+                        sat_freq=s_f,
                         date=d,
                         fig_path=figpath,
                         show_fig = False
@@ -36,8 +36,8 @@ def validate_singular(path_air,
                         path_sat,
                         scan_direction,
                         flight_direction,
-                        air_f,
-                        sat_f,
+                        air_freq,
+                        sat_freq,
                         date,
                         fig_path = None,
                         show_fig = True):
@@ -59,19 +59,19 @@ def validate_singular(path_air,
     -------
 
     """
-    ER2_flight = FlightData(path=path_air,
-                            date=date,
-                            scan_direction=scan_direction,
-                            flight_direction=flight_direction,
-                            frequency= air_f,
-                            )
+    ER2_flight = AirborneData(path=path_air,
+                              date=date,
+                              scan_direction=scan_direction,
+                              flight_direction=flight_direction,
+                              air_freq= air_freq,
+                              )
 
     AMSR2_OBS = SatelliteData(path=path_sat,
                               sensor="amsr2",
                               date=date,
                               overpass="night",
                               target_res="10",
-                              frequency= sat_f,
+                              sat_freq= sat_freq,
                               )
 
     air_mpdi, sat_mpdi = collocate_mpdi(ER2_flight, AMSR2_OBS,)
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     """
     Setup:
     Available frequencies:
-        FlightData (AMPR) : 10.7, 19.35, 37.1
+        AirborneData (AMPR) : 10.7, 19.35, 37.1
         SatelliteData (AMSR2) : 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
     """
     path_ampr = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/data_from_RichDJ"

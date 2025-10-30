@@ -1,6 +1,6 @@
 import matplotlib
 
-from validation.ER2_Flight import FlightData
+from validation.ER2_Flight import AirborneData
 
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt

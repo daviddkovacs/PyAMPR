@@ -8,7 +8,7 @@ import xarray as xr
 import pandas as pd
 import os
 
-class FlightData:
+class AirborneData:
     """
     Class to read in AMPR data from ER-2 flights
 
@@ -23,7 +23,7 @@ class FlightData:
                  date,
                  scan_direction,
                  flight_direction,
-                 frequency,
+                 air_freq,
                  *args,
                  **kwargs):
 
@@ -31,14 +31,14 @@ class FlightData:
         self.date = datetime.strptime(date, "%Y-%m-%d").strftime("%d_%b")
         self.scan_direction = scan_direction
         self.flight_direction =flight_direction
-        self.frequency = frequency
+        self.air_freq = air_freq
 
     def to_pandas(self):
 
         file_name = f"{self.date}_{self.scan_direction}_{self.flight_direction}.mat_data.csv"
         pandas_ampr = pd.read_csv(os.path.join(self.path,file_name), index_col=False)
         pandas_ampr = pandas_ampr.rename(columns={"Longitude": "lon", "Latitude": "lat"})
-        pandas_ampr = pandas_ampr[["lon", "lat", f"MPDI {self.frequency}"]]
+        pandas_ampr = pandas_ampr[["lon", "lat", f"MPDI {self.air_freq}"]]
 
         return pandas_ampr
 
