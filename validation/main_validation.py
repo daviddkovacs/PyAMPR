@@ -33,10 +33,11 @@ def validate_all(path_ampr,
 
 
 def validate_singular(path_air,
-                        path_sat,
                         scan_direction,
                         flight_direction,
                         air_freq,
+                        path_sat,
+                      sensor,
                         sat_freq,
                         date,
                         fig_path = None,
@@ -67,7 +68,7 @@ def validate_singular(path_air,
                               )
 
     AMSR2_OBS = SatelliteData(path=path_sat,
-                              sensor="amsr2",
+                              sensor=sensor,
                               date=date,
                               overpass="night",
                               target_res="10",
@@ -77,19 +78,14 @@ def validate_singular(path_air,
     air_mpdi, sat_mpdi = collocate_mpdi(ER2_flight, AMSR2_OBS,)
 
     Figs = CompareData(air_mpdi,
-                sat_mpdi,
-                air_f,
-                sat_f,
-                date)
+                       sat_mpdi,
+                       ER2_flight,
+                       AMSR2_OBS)
 
     Figs.longitude_plot(savedir = fig_path,
-                        flight_direction = flight_direction,
-                        scan_direction = scan_direction,
                         show_fig = show_fig)
 
     Figs.scatter_plot(savedir = fig_path,
-                        flight_direction = flight_direction,
-                        scan_direction = scan_direction,
                       show_fig=show_fig)
 
 if __name__ == "__main__":
@@ -107,16 +103,18 @@ if __name__ == "__main__":
     AMPR_f = "37.1"
     AMSR2_f = "36.5"
     figpath = rf"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/figures"
+    sensor = "amsr2"
 
-    # validate_singular(
-    #     path_air = path_ampr,
-    #     path_sat=path_amsr,
-    #     scan_direction=scan_direction,
-    #     flight_direction=flight_direction,
-    #     air_f =AMPR_f,
-    #     sat_f=AMSR2_f,
-    #     date=date,
-    #     fig_path=figpath,
-    # )
+    validate_singular(
+        path_air = path_ampr,
+        scan_direction=scan_direction,
+        flight_direction=flight_direction,
+        air_freq =AMPR_f,
+        sensor=sensor,
+        path_sat=path_amsr,
+        sat_freq=AMSR2_f,
+        date=date,
+        fig_path=figpath,
+    )
 
-    validate_all(path_ampr, path_amsr, figpath)
+    # validate_all(path_ampr, path_amsr, figpath)

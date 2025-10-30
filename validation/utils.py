@@ -43,6 +43,7 @@ def filter_distance(distance_df,
 
     return radius_df
 
+
 def nn_loc_search(df1,
                   df2,
                   ):
@@ -99,9 +100,8 @@ def collocate_mpdi(ref_obj,
     air_data = ref_obj.to_pandas()
     sat_data = test_obj.to_pandas()
 
-    ampr_freq = ref_obj.frequency
-    sat_freq = test_obj.frequency
-
+    ampr_freq = ref_obj.air_freq
+    sat_freq = test_obj.sat_freq
 
     # Find NN observations to all locs in air_data
     nearest_locs = nn_loc_search(sat_data, air_data)

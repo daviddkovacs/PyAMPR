@@ -30,6 +30,9 @@ class SatelliteData:
                  **kwargs):
 
         self.sat_freq = sat_freq
+        self.sensor = sensor
+        self.overpass = overpass
+        self.target_res = target_res
 
         year_month = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m")
         date_fmt = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d")

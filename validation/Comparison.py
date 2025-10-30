@@ -1,6 +1,7 @@
 import matplotlib
 
 from validation.ER2_Flight import AirborneData
+from validation.Satellite_Observations import SatelliteData
 
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
@@ -10,26 +11,36 @@ import numpy as np
 import os
 
 class CompareData:
+    """
+    Class to provide methods for comparison of sat and airborne MPDIs
+    needs to be initiated with MPDIs as calulcated by collocate_mpdi(), AirborneData and SatelliteData instances
+    """
+    def __init__(self, air_mpdi, sat_mpdi, air_instance, sat_instance, *args):
 
-    def __init__(self,
-                 air_mpdi,
-                 sat_mpdi,
-                 air_freq,
-                 sat_freq,
-                 date):
-
+        # MPDI dataframes
         self.air_mpdi = air_mpdi
         self.sat_mpdi = sat_mpdi
-        self.air_freq = air_freq
-        self.sat_freq = sat_freq
-        self.date = date
 
-        self.air_mpdi_array = air_mpdi[f"MPDI {air_freq}"]
-        self.sat_mpdi_array = sat_mpdi[f"MPDI {sat_freq}"]
+        # MPDI arrays
+        self.air_mpdi_array = air_mpdi[f"MPDI {air_instance.air_freq}"]
+        self.sat_mpdi_array = sat_mpdi[f"MPDI {sat_instance.sat_freq}"]
+
+        # Airborne specific variables
+        self.air_freq = air_instance.air_freq
+        self.flight_direction = air_instance.flight_direction
+        self.scan_direction = air_instance.scan_direction
+
+        # Satellite specific variables
+        self.sensor = sat_instance.sensor
+        self.overpass = sat_instance.overpass
+        self.target_res = sat_instance.target_res
+        self.sat_freq = sat_instance.sat_freq
+
+        #Common variables
+        self.date = air_instance.date
 
 
-    def statistics(self,
-                   ):
+    def statistics(self,):
 
         r = pd.Series(self.air_mpdi_array).corr(pd.Series(self.sat_mpdi_array))
         rmse = np.sqrt(np.mean((self.sat_mpdi_array - self.air_mpdi_array) ** 2))
@@ -48,8 +59,6 @@ class CompareData:
 
     def longitude_plot(self,
                        savedir = None,
-                       flight_direction = None,
-                       scan_direction = None,
                        show_fig = True
                        ):
 
@@ -57,12 +66,19 @@ class CompareData:
 
         plt.figure(figsize=(8, 4))
 
-        plt.plot(self.air_mpdi["lon"], self.air_mpdi_array, label=f"AMPR {self.air_freq} GHz", color="tab:blue")
-        plt.plot(self.sat_mpdi["lon"], self.sat_mpdi_array, label=f"AMSR2 {self.sat_freq} GHz", color="tab:orange")
+        plt.plot(self.air_mpdi["lon"],
+                 self.air_mpdi_array,
+                 label=f"AMPR {self.air_freq} GHz",
+                 color="tab:blue")
+
+        plt.plot(self.sat_mpdi["lon"],
+                 self.sat_mpdi_array,
+                 label=f"{self.sensor} {self.target_res}km {self.sat_freq} GHz",
+                 color="tab:orange")
 
         plt.xlabel("Longitude")
         plt.ylabel(f"MPDI")
-        plt.title(f"{self.date} {flight_direction} {scan_direction}\n"
+        plt.title(f"{self.date} {self.flight_direction} {self.scan_direction}\n"
                   f"R: {stats_dict['r']}\n"
                   f"RMSE: {stats_dict['rmse']}\n"
                   f"Bias: {stats_dict['bias']}\n")
@@ -70,15 +86,13 @@ class CompareData:
         plt.grid(True)
         plt.tight_layout()
         if savedir:
-            plt.savefig(os.path.join(savedir,rf"{self.date}_{flight_direction}_{scan_direction}_{self.air_freq}_long.png"))
+            plt.savefig(os.path.join(savedir,rf"{self.date}_{self.flight_direction}_{self.scan_direction}_{self.air_freq}_long.png"))
         if show_fig:
             plt.show()
 
 
     def scatter_plot(self,
                      savedir = None,
-                     flight_direction = None,
-                     scan_direction = None,
                      show_fig=True
                      ):
 
@@ -111,12 +125,12 @@ class CompareData:
 
         plt.xlabel(f"AMPR MPDI {self.air_freq} GHz")
         plt.ylabel(f"AMSR2 MPDI {self.sat_freq} GHz")
-        plt.title(f"{self.date} {flight_direction} {scan_direction}")
+        plt.title(f"{self.date} {self.flight_direction} {self.scan_direction}")
         plt.grid(False)
         plt.xlim([min_val, max_val])
         plt.ylim([min_val,max_val])
         plt.tight_layout()
         if savedir:
-            plt.savefig(os.path.join(savedir,rf"{self.date}_{flight_direction}_{scan_direction}_{self.air_freq}_scatter.png"))
+            plt.savefig(os.path.join(savedir,rf"{self.date}_{self.flight_direction}_{self.scan_direction}_{self.air_freq}_scatter.png"))
         if show_fig:
             plt.show()
