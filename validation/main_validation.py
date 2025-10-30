@@ -126,14 +126,14 @@ if __name__ == "__main__":
     scan_direction = "1_25"
 
     # Satellite (AMSR2) variables
-    path_sat = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/LPRM/passive_input/coarse_resolution/AMSR2"
+    path_sat = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/LPRM/passive_input/medium_resolution/AMSR2"
     sat_freq = "10.7"
     sat_sensor = "amsr2"
-    overpass = "night"
-    target_res = "25"
+    overpass = "day"
+    target_res = "10"
 
     # Comomn variables
-    date = "2024-10-25"
+    date = "2024-10-22"
     figpath = None
 
     # Singular validation with plot

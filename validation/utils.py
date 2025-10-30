@@ -26,7 +26,7 @@ def to_radians(df,
 
 
 def filter_distance(distance_df,
-                    radius = 5):
+                    radius = 10):
     """
 
     Parameters

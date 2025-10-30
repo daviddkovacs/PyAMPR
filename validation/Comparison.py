@@ -75,8 +75,11 @@ class CompareData:
 
         plt.plot(self.sat_mpdi["lon"],
                  self.sat_mpdi_array,
-                 label=f"{self.sat_sensor} {self.target_res}km {self.sat_freq} GHz",
-                 color="tab:orange")
+                 label=f"{self.sat_sensor.upper()} {self.target_res}km {self.sat_freq} GHz",
+                 color="tab:orange",
+                 marker='x',
+                 linestyle='',
+                 markersize=6)
 
         plt.xlabel("Longitude")
         plt.ylabel(f"MPDI")
