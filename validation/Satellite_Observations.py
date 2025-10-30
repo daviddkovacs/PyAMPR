@@ -13,7 +13,7 @@ class SatelliteData:
     Class to read in Satellite data from (currently from AMSR2)
 
     path: location of .nc files
-    sensor: satellite sensor used (currently amsr2)
+    sat_sensor: satellite sat_sensor used (currently amsr2)
     date: in format YYYY-MM-DD
     overpass: day, night
     target_res: pixel resolution 10 or 25 (km)
@@ -21,7 +21,7 @@ class SatelliteData:
     """
     def __init__(self,
                  path,
-                 sensor,
+                 sat_sensor,
                  date,
                  overpass,
                  target_res,
@@ -30,14 +30,14 @@ class SatelliteData:
                  **kwargs):
 
         self.sat_freq = sat_freq
-        self.sensor = sensor
+        self.sat_sensor = sat_sensor
         self.overpass = overpass
         self.target_res = target_res
 
         year_month = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m")
         date_fmt = datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d")
 
-        pattern = f"{sensor}_l1bt_{overpass}_{date_fmt}_{target_res}km.nc"
+        pattern = f"{sat_sensor}_l1bt_{overpass}_{date_fmt}_{target_res}km.nc"
         self.bt_file = os.path.join(path,overpass,year_month,pattern)
 
 

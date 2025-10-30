@@ -33,15 +33,17 @@ def validate_all(path_ampr,
 
 
 def validate_singular(path_air,
-                        scan_direction,
-                        flight_direction,
-                        air_freq,
-                        path_sat,
-                      sensor,
-                        sat_freq,
-                        date,
-                        fig_path = None,
-                        show_fig = True):
+                      scan_direction,
+                      flight_direction,
+                      air_freq,
+                      path_sat,
+                      sat_sensor,
+                      sat_freq,
+                      overpass,
+                      target_res,
+                      date,
+                      fig_path = None,
+                      show_fig = True):
     """
     Runs validation routine. Collocates Satellite observations to AMPR data, and calculates MPDI for radiometers.
 
@@ -68,10 +70,10 @@ def validate_singular(path_air,
                               )
 
     AMSR2_OBS = SatelliteData(path=path_sat,
-                              sensor=sensor,
+                              sat_sensor=sat_sensor,
                               date=date,
-                              overpass="night",
-                              target_res="10",
+                              overpass=overpass,
+                              target_res=target_res,
                               sat_freq= sat_freq,
                               )
 
@@ -104,22 +106,35 @@ if __name__ == "__main__":
         '6.9', '7.3', '10.7', '18.7', '23.8', '36.5', '89.0'
     Sensor:
         "amsr2" (more to come..)
+    Target resolution:
+        '10', '25' (kms)
+    Overpass:
+        'day', 'night'
         
+        
+    #### Common Setup ####
+    date:
+        '2024-10-22', '2024-10-25', '2024-10-31'
+    figpath:
+        if defined, saves figs
+           
     """
     # Airborne (AMPR) variables
     path_air = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/data_from_RichDJ"
-    air_freq = "37.1"
+    air_freq = "10.7"
     flight_direction = "EW"
     scan_direction = "1_25"
 
     # Satellite (AMSR2) variables
-    path_sat = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/LPRM/passive_input/medium_resolution/AMSR2"
-    sat_freq = "36.5"
-    sensor = "amsr2"
+    path_sat = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/LPRM/passive_input/coarse_resolution/AMSR2"
+    sat_freq = "10.7"
+    sat_sensor = "amsr2"
+    overpass = "night"
+    target_res = "25"
 
     # Comomn variables
-    date = "2024-10-31"
-    figpath = rf"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/figures"
+    date = "2024-10-25"
+    figpath = None
 
     # Singular validation with plot
     validate_singular(
@@ -127,9 +142,11 @@ if __name__ == "__main__":
         scan_direction=scan_direction,
         flight_direction=flight_direction,
         air_freq =air_freq,
-        sensor=sensor,
+        sat_sensor=sat_sensor,
         path_sat=path_sat,
         sat_freq=sat_freq,
+        overpass=overpass,
+        target_res=target_res,
         date=date,
         fig_path=figpath,
     )

@@ -26,7 +26,7 @@ def to_radians(df,
 
 
 def filter_distance(distance_df,
-                    radius = 10):
+                    radius = 5):
     """
 
     Parameters
@@ -117,7 +117,10 @@ def collocate_mpdi(ref_obj,
                                         sat_data_nn[f"bt_{sat_freq}H"])
 
     sat_mpdi = sat_data_nn.filter(["lat", "lon", "scantime", f"MPDI {sat_freq}"], axis=1).reset_index(drop=True)
-    air_mpdi = air_data_nn.filter(["lat", "lon", f"MPDI {ampr_freq}"], axis=1).reset_index(drop=True)
+
+    air_mpdi = { }
+    air_mpdi["filtered"] = air_data_nn.filter(["lat", "lon", f"MPDI {ampr_freq}"], axis=1).reset_index(drop=True)
+    air_mpdi["original"] = air_data.filter(["lat", "lon", f"MPDI {ampr_freq}"], axis=1).reset_index(drop=True)
 
     del sat_data_nn
     del air_data_nn

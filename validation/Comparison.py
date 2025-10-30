@@ -22,7 +22,8 @@ class CompareData:
         self.sat_mpdi = sat_mpdi
 
         # MPDI arrays
-        self.air_mpdi_array = air_mpdi[f"MPDI {air_instance.air_freq}"]
+        self.air_mpdi_array_filtered = air_mpdi["filtered"][f"MPDI {air_instance.air_freq}"]
+        self.air_mpdi_array_original = air_mpdi["original"][f"MPDI {air_instance.air_freq}"]
         self.sat_mpdi_array = sat_mpdi[f"MPDI {sat_instance.sat_freq}"]
 
         # Airborne specific variables
@@ -31,7 +32,7 @@ class CompareData:
         self.scan_direction = air_instance.scan_direction
 
         # Satellite specific variables
-        self.sensor = sat_instance.sensor
+        self.sat_sensor = sat_instance.sat_sensor
         self.overpass = sat_instance.overpass
         self.target_res = sat_instance.target_res
         self.sat_freq = sat_instance.sat_freq
@@ -42,17 +43,18 @@ class CompareData:
 
     def statistics(self,):
 
-        r = pd.Series(self.air_mpdi_array).corr(pd.Series(self.sat_mpdi_array))
-        rmse = np.sqrt(np.mean((self.sat_mpdi_array - self.air_mpdi_array) ** 2))
-        bias = np.mean(self.air_mpdi_array) - np.mean(self.sat_mpdi_array)
+        r = pd.Series(self.air_mpdi_array_filtered).corr(pd.Series(self.sat_mpdi_array))
+        rmse = np.sqrt(np.mean((self.sat_mpdi_array - self.air_mpdi_array_filtered) ** 2))
+        bias = np.mean(self.air_mpdi_array_filtered) - np.mean(self.sat_mpdi_array)
         precision = np.round(np.sqrt(np.mean(
-            (self.sat_mpdi_array - self.air_mpdi_array - np.mean(self.sat_mpdi_array - self.air_mpdi_array)) ** 2)),
+            (self.sat_mpdi_array - self.air_mpdi_array_filtered - np.mean(self.sat_mpdi_array - self.air_mpdi_array_filtered)) ** 2)),
                  2)
 
         stats_dict = {"r": np.round(r, 2),
                       "rmse": np.round(rmse, 3),
                       "bias": np.round(bias, 3),
-                      "precision" : np.round(precision, 3)}
+                      "precision" : np.round(precision, 3),
+                      "N": len(self.air_mpdi_array_filtered)}
 
         return stats_dict
 
@@ -66,14 +68,14 @@ class CompareData:
 
         plt.figure(figsize=(8, 4))
 
-        plt.plot(self.air_mpdi["lon"],
-                 self.air_mpdi_array,
+        plt.plot(self.air_mpdi["original"]["lon"],
+                 self.air_mpdi_array_original,
                  label=f"AMPR {self.air_freq} GHz",
                  color="tab:blue")
 
         plt.plot(self.sat_mpdi["lon"],
                  self.sat_mpdi_array,
-                 label=f"{self.sensor} {self.target_res}km {self.sat_freq} GHz",
+                 label=f"{self.sat_sensor} {self.target_res}km {self.sat_freq} GHz",
                  color="tab:orange")
 
         plt.xlabel("Longitude")
@@ -81,7 +83,9 @@ class CompareData:
         plt.title(f"{self.date} {self.flight_direction} {self.scan_direction}\n"
                   f"R: {stats_dict['r']}\n"
                   f"RMSE: {stats_dict['rmse']}\n"
-                  f"Bias: {stats_dict['bias']}\n")
+                  f"Bias: {stats_dict['bias']}\n"
+                  )
+
         plt.legend()
         plt.grid(True)
         plt.tight_layout()
@@ -99,9 +103,10 @@ class CompareData:
         stats_dict = self.statistics()
         stats_text = (f"R: {stats_dict['r']}\nRMSE: {stats_dict['rmse']}\n"
                       f"Bias: {stats_dict['bias']}\n"
-                      f"Precision: {stats_dict['precision']}\n")
+                      f"Precision: {stats_dict['precision']}\n"
+                      f"N: {stats_dict['N']}\n")
 
-        x = self.air_mpdi_array
+        x = self.air_mpdi_array_filtered
         y = self.sat_mpdi_array
 
         min_val =0
