@@ -90,31 +90,49 @@ def validate_singular(path_air,
 
 if __name__ == "__main__":
     """
-    Setup:
-    Available frequencies:
-        AirborneData (AMPR) : 10.7, 19.35, 37.1
-        SatelliteData (AMSR2) : 6.9, 7.3, 10.7, 18.7, 23.8, 36.5, 89.0
+    #### Airborne Setup ####
+    Frequencies:
+        '10.7', '19.35', '37.1'
+    Flight Directions:
+        'EW', 'WE'
+    Scan directions:
+        '1_25', '26_50'
+            
+        
+    #### Satellite Setup ####
+    Frequencies (AMSR2):
+        '6.9', '7.3', '10.7', '18.7', '23.8', '36.5', '89.0'
+    Sensor:
+        "amsr2" (more to come..)
+        
     """
-    path_ampr = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/data_from_RichDJ"
-    path_amsr = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/LPRM/passive_input/medium_resolution/AMSR2"
-    date = "2024-10-31"
+    # Airborne (AMPR) variables
+    path_air = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/data_from_RichDJ"
+    air_freq = "37.1"
     flight_direction = "EW"
     scan_direction = "1_25"
-    AMPR_f = "37.1"
-    AMSR2_f = "36.5"
-    figpath = rf"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/figures"
+
+    # Satellite (AMSR2) variables
+    path_sat = r"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/LPRM/passive_input/medium_resolution/AMSR2"
+    sat_freq = "36.5"
     sensor = "amsr2"
 
+    # Comomn variables
+    date = "2024-10-31"
+    figpath = rf"/home/ddkovacs/shares/climers/Projects/CCIplus_Soil_Moisture/07_data/WHYMSIE/figures"
+
+    # Singular validation with plot
     validate_singular(
-        path_air = path_ampr,
+        path_air = path_air,
         scan_direction=scan_direction,
         flight_direction=flight_direction,
-        air_freq =AMPR_f,
+        air_freq =air_freq,
         sensor=sensor,
-        path_sat=path_amsr,
-        sat_freq=AMSR2_f,
+        path_sat=path_sat,
+        sat_freq=sat_freq,
         date=date,
         fig_path=figpath,
     )
 
+    # Validate all flights of ER-2 (in loop), parameters hard coded
     # validate_all(path_ampr, path_amsr, figpath)
