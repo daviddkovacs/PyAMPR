@@ -1,5 +1,5 @@
 from validation.ER2_Flight import FlightData
-from validation.AMSR2_Observations import SatelliteData
+from validation.Satellite_Observations import SatelliteData
 from validation.Comparison import CompareData
 from utils import collocate_mpdi
 
@@ -67,8 +67,10 @@ def validate_singular(path_air,
                             )
 
     AMSR2_OBS = SatelliteData(path=path_sat,
+                              sensor="amsr2",
                               date=date,
                               overpass="night",
+                              target_res="10",
                               frequency= sat_f,
                               )
 
